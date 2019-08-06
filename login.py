@@ -1,5 +1,5 @@
 from tkinter import *
-import conn
+from src import conn
 
 
 class register(Toplevel):
@@ -11,6 +11,9 @@ class register(Toplevel):
         self.geometry('300x300')
         self.title('register')
         frame = Frame(self)
+        # EXPERIMENTAL
+        error_frame = Frame(self)
+        error_frame.place(anchor=N, relx=0.5, rely=0)
         frame.place(rely=pos, relx=.3)
 
         label_first_name = Label(frame, text='First Name')
@@ -47,8 +50,14 @@ class register(Toplevel):
         remember_me.pack()
 
         submit = Button(frame, text='Submit',
-                        command=conn.register_user(frame, first_name.get(), last_name.get(), username.get(),
-                                                   password.get(), confirm_password.get(), remember_me_val.get()))
+                        command=lambda: conn.register_user(self,
+                                                           error_frame,
+                                                           first_name.get(),
+                                                           last_name.get(),
+                                                           username.get(),
+                                                           password.get(),
+                                                           confirm_password.get(),
+                                                           remember_me_val.get()))
         submit.pack()
 
 
@@ -66,10 +75,14 @@ class login(Frame):
         vertical_pos = int(main.winfo_screenheight() / 2 - windowHeight / 2)
 
         self.master.geometry('+{}+{}'.format(horizontal_pos, vertical_pos))
-        self.master.resizable(width=False, height=False)
+        self.master.resizable(width=False, height=True)
 
+        error_frame = Frame(self.master)
+        error_frame.place(anchor=N, relx=0.5, rely=0)
         frame = Frame(self.master)
         frame.place(rely=.2, relx=.2)
+        entry_frame = Frame(self.master)
+        entry_frame.place(rely=.2, relx=.2)
 
         label_user = Label(frame, text='Username:')
         label_user.pack()
@@ -83,9 +96,12 @@ class login(Frame):
         password = Entry(frame, show='*', bd=1, textvariable=StringVar())
         password.pack()
 
-        login = Button(frame, text='Login', bd=1, command=conn.login_user(frame, username.get(), password.get()))
-        # add login command
-        login.pack()
+        sign_in = Button(frame, text='Login', bd=1, command=lambda: conn.login_user(entry_frame,
+                                                                                    frame,
+                                                                                    error_frame,
+                                                                                    username.get(),
+                                                                                    password.get()))
+        sign_in.pack()
 
         reg = Button(frame, text='Register', bd=0, fg='PURPLE', command=register)
         reg.pack()
