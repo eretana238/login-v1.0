@@ -1,6 +1,12 @@
 from tkinter import *
-from src import conn
+import conn as c
+import sqlite3
+from sqlite3 import Error
 
+try:
+    conn = sqlite3.connect('clients.db')
+except Error as e:
+    print(e)
 
 class register(Toplevel):
     def __init__(self, *args, **kwargs):
@@ -50,7 +56,7 @@ class register(Toplevel):
         remember_me.pack()
 
         submit = Button(frame, text='Submit',
-                        command=lambda: conn.register_user(self,
+                        command=lambda: c.register_user(conn, self,
                                                            error_frame,
                                                            first_name.get(),
                                                            last_name.get(),
@@ -96,7 +102,7 @@ class login(Frame):
         password = Entry(frame, show='*', bd=1, textvariable=StringVar())
         password.pack()
 
-        sign_in = Button(frame, text='Login', bd=1, command=lambda: conn.login_user(entry_frame,
+        sign_in = Button(frame, text='Login', bd=1, command=lambda: c.login_user(conn,entry_frame,
                                                                                     frame,
                                                                                     error_frame,
                                                                                     username.get(),
