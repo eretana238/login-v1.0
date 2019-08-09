@@ -34,16 +34,13 @@ def login_user(conn, entry_frame, frame, error_frame, username, password):
     if is_completed:
 
         user_log = search_user(conn, username, password)
-        if user_log == None:
+        if user_log == None or user_log is None or len(user_log) == 0:
             clean_errors(error_frame)
             invalid_login = Label(error_frame, text='Error: incorrect user/pass')
             invalid_login.pack()
 
         else:
-            error_frame.destroy()
             entry_frame.destroy()
-            
-            welcome_msg = Label(entry_frame, text='Welcome')
             conn.close()
 
     else:
@@ -56,7 +53,6 @@ def search_user(conn, username, password):
     try:
         c = conn.cursor()
         c.execute('SELECT * FROM users WHERE username=? AND password=?', (username,password))
-        print(c.fetchall())
         return c.fetchall()
     except Error as e:
         print(e)

@@ -87,8 +87,6 @@ class login(Frame):
         error_frame.place(anchor=N, relx=0.5, rely=0)
         frame = Frame(self.master)
         frame.place(rely=.2, relx=.2)
-        entry_frame = Frame(self.master)
-        entry_frame.place(rely=.2, relx=.2)
 
         label_user = Label(frame, text='Username:')
         label_user.pack()
@@ -102,7 +100,7 @@ class login(Frame):
         password = Entry(frame, show='*', bd=1, textvariable=StringVar())
         password.pack()
 
-        sign_in = Button(frame, text='Login', bd=1, command=lambda: c.login_user(conn,entry_frame,
+        sign_in = Button(frame, text='Login', bd=1, command=lambda: c.login_user(conn,self.master,
                                                                                     frame,
                                                                                     error_frame,
                                                                                     username.get(),
