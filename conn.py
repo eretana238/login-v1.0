@@ -16,7 +16,6 @@ def register_user(conn, frame, error_frame, first_name, last_name, username, pas
         user_info = (first_name, last_name, username, password, remember_me)
         create_user_table(conn)
         insert_user_info(conn, user_info)
-        conn.close()
         frame.destroy()
 
 
@@ -35,14 +34,15 @@ def login_user(conn, entry_frame, frame, error_frame, username, password):
     if is_completed:
 
         user_log = search_user(conn, username, password)
-        if user_log is None:
+        if user_log == None:
             clean_errors(error_frame)
             invalid_login = Label(error_frame, text='Error: incorrect user/pass')
             invalid_login.pack()
 
         else:
-            frame.destroy()
             error_frame.destroy()
+            entry_frame.destroy()
+            
             welcome_msg = Label(entry_frame, text='Welcome')
             conn.close()
 
@@ -55,7 +55,7 @@ def login_user(conn, entry_frame, frame, error_frame, username, password):
 def search_user(conn, username, password):
     try:
         c = conn.cursor()
-        c.execute('SELECT * FROM users')
+        c.execute('SELECT * FROM users WHERE username=? AND password=?', (username,password))
         print(c.fetchall())
         return c.fetchall()
     except Error as e:
@@ -75,11 +75,8 @@ def create_user_table(conn):
 def insert_user_info(conn, user_info):
     try:
         c = conn.cursor()
-        # c.execute('INSERT INTO users(firstname, lastname, username, password, rememberme)VALUES(?, ?, ?, ?, ?)', user_info)
-        sql = 'INSERT INTO users VALUES(?, ?, ?, ?, ?)'
-        c.execute(sql, user_info)
-        c.execute('SELECT * FROM users')
-        print(c.fetchall())
+        c.execute("INSERT INTO users(firstname, lastname, username,password,rememberme) VALUES(?, ?, ?, ?, ?)", (user_info[0], user_info[1],user_info[2],user_info[3],user_info[4]))
+        conn.commit()
     except Error as e:
         print(e)
 
