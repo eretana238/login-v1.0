@@ -5,15 +5,7 @@ The login system v1.0 is able to register users by their name, username, and pas
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
 **Run login.py as the main application**
-
-### Prerequisites
-
-Python needs to be running in your machine. If python isn't installed:
-
-Download https://www.python.org/downloads/
 
 ## License
 
